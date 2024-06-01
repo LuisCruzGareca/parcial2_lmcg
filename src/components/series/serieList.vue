@@ -20,10 +20,18 @@ function toEdit(id: number) {
 }
 
 async function toDelete(id: number) {
-  var r = confirm('¿Está seguro que se desea eliminar las series?')
+  var r = confirm('¿Está seguro que se desea eliminar la serie?')
   if (r == true) {
     await http.delete(`${ENDPOINT}/${id}`).then(() => getSeries())
   }
+}
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat('es-ES', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(new Date(date))
 }
 
 onMounted(() => {
@@ -43,9 +51,9 @@ onMounted(() => {
     <div class="row">
       <h2>Lista de Series</h2>
       <div class="col-12">
-        <RouterLink to="/series/crear"
-          ><font-awesome-icon icon="fa-solid fa-plus" /> Crear Nuevo</RouterLink
-        >
+        <RouterLink to="/series/crear">
+          <font-awesome-icon icon="fa-solid fa-plus" /> Crear Nuevo
+        </RouterLink>
       </div>
     </div>
 
@@ -54,28 +62,31 @@ onMounted(() => {
         <thead>
           <tr>
             <th scope="col">N°</th>
-            <th scope="col">titulo</th>
-            <th scope="col">sinopsis</th>
-            <th scope="col">director</th>
-            <th scope="col">temporadas</th>
-            <th scope="col">fecha_estreno</th>
-            <th scope="col">ediccion</th>
+            <th scope="col">Título</th>
+            <th scope="col">Protagonista</th>
+            <th scope="col">Sinopsis</th>
+            <th scope="col">Director</th>
+            <th scope="col">Temporadas</th>
+            <th scope="col">Fecha de Estreno</th>
+            <th scope="col">Edición</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(series, index) in series" :key="series.id">
+          <tr v-for="(serie, index) in series" :key="serie.id">
             <th scope="row">{{ index + 1 }}</th>
-            <td>{{ series.titulo }}</td>
-            <td>{{ series.sinopsis }}</td>
-            <td>{{ series.director }}</td>
-            <td>{{ series.temporadas }}</td>
-            <td>{{ series.fecha_estreno }}</td>
+            <td>{{ serie.titulo }}</td>
+            <td>{{ serie.protagonista }}</td>
+            <td>{{ serie.sinopsis }}</td>
+            <td>{{ serie.director }}</td>
+            <td>{{ serie.temporadas }}</td>
+            <td>{{ formatDate(serie.fecha_estreno) }}</td>
             <td>
-              <button class="btn btn-link" @click="toEdit(series.id)">
+              <button class="btn btn-link" @click="toEdit(serie.id)">
                 Editar
-                <font-awesome-icon icon="fa-solid fa-edit" /></button
-              ><br />
-              <button class="btn btn-link" @click="toDelete(series.id)">
+                <font-awesome-icon icon="fa-solid fa-edit" />
+              </button>
+              <br />
+              <button class="btn btn-link" @click="toDelete(serie.id)">
                 Eliminar
                 <font-awesome-icon icon="fa-solid fa-trash" />
               </button>

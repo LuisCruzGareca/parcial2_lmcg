@@ -9,6 +9,7 @@ const props = defineProps<{
 
 const ENDPOINT = props.ENDPOINT_API ?? ''
 const titulo = ref('')
+const protagonista = ref('')
 const sinopsis = ref('')
 const director = ref('')
 const temporadas = ref('')
@@ -19,6 +20,7 @@ async function editarSeries() {
   await http
     .patch(`${ENDPOINT}/${id}`, {
       titulo: titulo.value,
+      protagonista: protagonista.value,
       sinopsis: sinopsis.value,
       director: director.value,
       temporadas: temporadas.value,
@@ -30,6 +32,7 @@ async function editarSeries() {
 async function getSeries() {
   await http.get(`${ENDPOINT}/${id}`).then((response) => {
     ;(titulo.value = response.data.titulo),
+      (protagonista.value = response.data.protagonista),
       (sinopsis.value = response.data.sinopsis),
       (director.value = response.data.director),
       (temporadas.value = response.data.temporadas),
@@ -68,6 +71,17 @@ onMounted(() => {
         <div class="form-floating mb-3">
           <input type="text" class="form-control" v-model="titulo" placeholder="Titulo" required />
           <label for="titulo">Titulo</label>
+        </div>
+
+        <div class="form-floating">
+          <input
+            type="protagonista"
+            class="form-control"
+            v-model="protagonista"
+            placeholder="protagonista"
+            required
+          />
+          <label for="protagonista">protagonista</label>
         </div>
 
         <div class="form-floating">
